@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* newNode(int data) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->left = node->right = NULL;
+    return node;
+}
+
+struct Node* insert(struct Node* node, int data) {
+    if (node == NULL) return newNode(data);
+    if (data < node->data)
+        node->left = insert(node->left, data);
+    else if (data > node->data)
+        node->right = insert(node->right, data);
+    return node;
+}
+
+int search(struct Node* root, int key) {
+    if (root == NULL) return 0;
+    if (root->data == key) return 1;
+    if (key < root->data) return search(root->left, key);
+    return search(root->right, key);
+}
+
+int findMin(struct Node* root) {
+    struct Node* current = root;
+    while (current && current->left != NULL)
+        current = current->left;
+    return current->data;
+}
+
+int findMax(struct Node* root) {
+    struct Node* current = root;
+    while (current && current->right != NULL)
+        current = current->right;
+    return current->data;
+}
+
+int main() {
+    struct Node* root = NULL;
+    root = insert(root, 15);
+    insert(root, 10);
+    insert(root, 20);
+    insert(root, 8);
+    insert(root, 12);
+    insert(root, 17);
+    insert(root, 25);
+
+    int numberToSearch = 10;
+    if (search(root, numberToSearch))
+        printf("%d found in the BST.\n", numberToSearch);
+    else
+        printf("%d not found in the BST.\n", numberToSearch);
+
+    printf("Minimum value in the BST: %d\n", findMin(root));
+    printf("Maximum value in the BST: %d\n", findMax(root));
+
+    return 0;
+}
+output:
+10 found in the BST.
+Minimum value in the BST: 8
+Maximum value in the BST: 25
+
+
+
