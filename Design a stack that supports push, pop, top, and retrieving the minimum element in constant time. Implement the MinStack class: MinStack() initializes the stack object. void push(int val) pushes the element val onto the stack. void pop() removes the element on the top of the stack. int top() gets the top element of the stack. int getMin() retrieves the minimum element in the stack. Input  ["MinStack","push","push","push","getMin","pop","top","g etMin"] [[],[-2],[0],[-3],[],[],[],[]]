@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+typedef struct {
+    int *stack;
+    int *minStack;
+    int topIndex;
+    int minIndex;
+    int capacity;
+} MinStack;
+
+MinStack* minStackCreate() {
+    MinStack *minStack = (MinStack *)malloc(sizeof(MinStack));
+    minStack->capacity = 1000;
+    minStack->stack = (int *)malloc(minStack->capacity * sizeof(int));
+    minStack->minStack = (int *)malloc(minStack->capacity * sizeof(int));
+    minStack->topIndex = -1;
+    minStack->minIndex = -1;
+    return minStack;
+}
+
+void minStackPush(MinStack* obj, int val) {
+    obj->stack[++(obj->topIndex)] = val;
+    if (obj->minIndex == -1 || val <= obj->minStack[obj->minIndex]) {
+        obj->minStack[++(obj->minIndex)] = val;
+    }
+}
+
+void minStackPop(MinStack* obj) {
+    if (obj->stack[obj->topIndex] == obj->minStack[obj->minIndex]) {
+        obj->minIndex--;
+    }
+    obj->topIndex--;
+}
+
+int minStackTop(MinStack* obj) {
+    return obj->stack[obj->topIndex];
+}
+
+int minStackGetMin(MinStack* obj) {
+    return obj->minStack[obj->minIndex];
+}
+
+void minStackFree(MinStack* obj) {
+    free(obj->stack);
+    free(obj->minStack);
+    free(obj);
+}
+
+int main() {
+    MinStack* obj = minStackCreate();
+    minStackPush(obj, -2);
+    minStackPush(obj, 0);
+    minStackPush(obj, -3);
+    printf("%d\n", minStackGetMin(obj)); // Returns -3
+    minStackPop(obj);
+    printf("%d\n", minStackTop(obj));    // Returns 0
+    printf("%d\n", minStackGetMin(obj)); // Returns -2
+    minStackFree(obj);
+    return 0;
+}
+output:
+-3
+0
+-2
