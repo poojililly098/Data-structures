@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void bucketSort(float arr[], int n) {
+    int i, j, bucketCount = 10;
+    float *buckets = malloc(bucketCount * sizeof(float));
+    int *bucketSizes = calloc(bucketCount, sizeof(int));
+
+    for (i = 0; i < bucketCount; i++)
+        buckets[i] = malloc(n * sizeof(float));
+
+    for (i = 0; i < n; i++) {
+        int index = arr[i] * bucketCount;
+        buckets[index][bucketSizes[index]++] = arr[i];
+    }
+
+    for (i = 0; i < bucketCount; i++) {
+        for (j = 0; j < bucketSizes[i]; j++) {
+            printf("%f ", buckets[i][j]);
+        }
+        free(buckets[i]);
+    }
+    free(buckets);
+    free(bucketSizes);
+}
+
+int main() {
+    float arr[] = {0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    bucketSort(arr, n);
+    return 0;
+}
